@@ -1,9 +1,5 @@
 #include "Class.h"
 
-extern char const_type[11][20];
-extern unsigned int g_index;
-extern unsigned int power;
-
 Class class = { 0 };
 
 int main(int argv, char* argc[]) {
@@ -17,7 +13,8 @@ int main(int argv, char* argc[]) {
         perror("Failed to open file");
         return -1;
     }
-    check_class_version(fp, &class);
+    check_class_version(&class, fp);
+    read_constant_pool(&class, fp);
     print_class_info(&class);
     return 0;
 }

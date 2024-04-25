@@ -6,6 +6,7 @@
 #define CLASS4J_CLASS_H
 
 #include "Common.h"
+#include "ConstantItem.h"
 
 typedef struct Class {
 
@@ -15,12 +16,24 @@ typedef struct Class {
     unsigned int this_class;                    // 本类类名序号
     unsigned int super_class;                   // 父类类名序号
 
+    unsigned short constant_pool_count;			// 常量池大小
+    ConstantItem* constant_pool;                // 常量池
 } Class;
 
 /**
  * 获取class文件版本号
  */
-void check_class_version(FILE*, Class*);
+void check_class_version(Class*, FILE*);
+
+/**
+ * 读取常量池信息
+ */
+void read_constant_pool(Class*, FILE*);
+
+/**
+ * 初始化常量池
+ */
+void init_constant_pool(Class*, int);
 
 /**
  * 打印class文件信息

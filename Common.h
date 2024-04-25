@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <malloc.h>
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -17,6 +18,20 @@
 #define U2 2
 #define U4 4
 #define U8 8
+
+#pragma region 常量类型
+#define CONSTANT_Utf8_info					1
+#define CONSTANT_Integer_info				3
+#define CONSTANT_Float_info					4
+#define CONSTANT_Long_info					5
+#define CONSTANT_Double_info				6
+#define CONSTANT_Class_info					7
+#define CONSTANT_String_info				8
+#define CONSTANT_Fieldref_info				9
+#define CONSTANT_Methodref_info				10
+#define CONSTANT_InterfaceMethodref_info	11
+#define CONSTANT_NameAndType_info			12
+#pragma endregion
 
 /**
  * 读取指定的n个字节

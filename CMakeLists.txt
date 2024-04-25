@@ -7,4 +7,7 @@ add_executable(class4j Class4j.c
         Class.h
         Class.c
         Common.c
-        Common.h)
+        Common.h
+        Class4j.h
+        ConstantItem.h
+        ConstantItem.c)
