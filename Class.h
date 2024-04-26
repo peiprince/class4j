@@ -7,6 +7,7 @@
 
 #include "Common.h"
 #include "ConstantItem.h"
+#include "FieldItem.h"
 
 typedef struct Class {
 
@@ -18,6 +19,11 @@ typedef struct Class {
 
     unsigned short constant_pool_count;			// 常量池大小
     ConstantItem* constant_pool;                // 常量池
+
+    unsigned short field_count;                 // 字段数量
+    FieldItem* field_table;                     // 字段表
+
+    int flags;                                  // 访问标识
 } Class;
 
 /**
@@ -36,8 +42,36 @@ void read_constant_pool(Class*, FILE*);
 void init_constant_pool(Class*, int);
 
 /**
+ * 访问标识类型
+ */
+typedef enum FlagType {
+    ClassType,
+    FieldType
+} FlagType;
+
+/**
+ * 读取访问类型
+ */
+void read_access_flags(Class*, FILE*, FlagType);
+
+/**
+ * 读取字段表
+ */
+void read_field_info(Class*, FILE*);
+
+/**
+ * 初始化字段表
+ */
+void init_field_table(Class*, int);
+
+/**
  * 打印class文件信息
  */
-void print_class_info(Class*);
+void print_class_info(Class*, char*);
+
+/**
+ * 打印class文件访问类型
+ */
+void printf_class_flag(Class*);
 
 #endif //CLASS4J_CLASS_H

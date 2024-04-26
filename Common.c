@@ -39,3 +39,11 @@ long long read_long_byte(FILE* fp)
     }
     return result;
 }
+
+void concat_flag_info(int byte, int target, char* result, char* info)
+{
+    if (byte == target)
+    {
+        strcat(result, info);
+    }
+}

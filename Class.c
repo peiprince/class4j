@@ -62,11 +62,64 @@ void init_constant_pool(Class* pthis, int count)
     }
 }
 
-void print_class_info(Class* pthis)
+void read_access_flags(Class* pthis, FILE* fp, FlagType type)
+{
+    int flags = read_n_byte(fp, U2);
+    switch (type) {
+        case ClassType:
+            pthis->flags = flags;
+            break;
+        case FieldType:
+            break;
+    }
+}
+
+void read_field_info(Class* pthis, FILE* fp)
+{
+    // 初始化常量表
+    init_field_table(pthis, read_n_byte(fp, U2));
+    // 解析字段信息
+    for (int i = 0; i < pthis->field_count; i++)
+    {
+        pthis->field_table[i].flags = read_n_byte(fp, U2);
+        pthis->field_table[i].cons_index = read_n_byte(fp, U2);
+        pthis->field_table[i].descriptor = read_n_byte(fp, U2);
+        // 读取当前字段的属性数量并初始化属性表
+        unsigned int attr_count = read_n_byte(fp, U2);
+        if (attr_count <= 0)
+        {
+            continue;
+        }
+//        init_attr_table(&class.field_table[i], attr_count);
+        // 读取字段属性表
+//        for (int j = 0; j < attr_count; j++)
+//        {
+            // 当前attribute在常量池中的index
+//            int attr_index = read_n_byte(fp, U2);
+//            ConstantItem item = pthis.get_constant_item_by_index(attr_index, &class);
+//            append_attr(&class.field_table[i], j, &item, p_class);
+//        }
+    }
+}
+
+void init_field_table(Class* pthis, int count)
+{
+    pthis->field_count = count;
+    pthis->field_table = (FieldItem *) malloc(count * sizeof(FieldItem));
+    for (int i = 0; i < count; i++)
+    {
+        FieldItem item = {0};
+//        construct_field_item(&item);
+        pthis->field_table[i] = item;
+    }
+}
+
+void print_class_info(Class* pthis, char* path)
 {
     printf(" minor version: %d, major version: %d, available for JDK %d and above.\n",
            pthis->minor_version, pthis->major_version, pthis->major_version - 44);
 
+    printf_class_flag(pthis);
     // 打印常量池信息
     printf("Constant pool(total - %d):\n", pthis->constant_pool_count);
     for (int i = 0; i < pthis->constant_pool_count; i++)
@@ -74,4 +127,30 @@ void print_class_info(Class* pthis)
         ConstantItem item = pthis->constant_pool[i];
         printf(" #%d = %s\t\t%s\n", item.index, const_type[item.type], item.value);
     }
+}
+
+void printf_class_flag(Class* pthis)
+{
+    char flags_info[128] = {0};
+    int byte1 = 0x000F & pthis->flags;
+    int byte2 = 0x00F0 & pthis->flags;
+    int byte3 = 0x0F00 & pthis->flags;
+    int byte4 = 0xF000 & pthis->flags;
+    // byte1
+    concat_flag_info(byte1, ACC_PUBLIC, flags_info, "ACC_PUBLIC, ");
+    // byte2
+    concat_flag_info(byte2, ACC_FINAL, flags_info, "ACC_FINAL, ");
+    concat_flag_info(byte2, ACC_SUPER, flags_info, "ACC_SUPER, ");
+    concat_flag_info(byte2, ACC_FINAL + ACC_SUPER, flags_info, "ACC_FINAL, ACC_SUPER, ");
+    // byte3
+    concat_flag_info(byte3, ACC_INTERFACE + ACC_ABSTRACT, flags_info, "ACC_INTERFACE, ACC_ABSTRACT, ");
+    concat_flag_info(byte3, ACC_ABSTRACT, flags_info, "ACC_ABSTRACT, ");
+    // byte4
+    concat_flag_info(byte4, ACC_SYNTHETIC, flags_info, "ACC_SYNTHETIC, ");
+    concat_flag_info(byte4, ACC_ANNOTATION, flags_info, "ACC_ANNOTATION, ");
+    concat_flag_info(byte4, ACC_ENUM, flags_info, "ACC_ENUM, ");
+
+    size_t length = strlen(flags_info);
+    flags_info[length - 2] = '\0';
+    printf(" flags: (0x%04x) %s\n", pthis->flags, flags_info);
 }

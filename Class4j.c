@@ -15,6 +15,7 @@ int main(int argv, char* argc[]) {
     }
     check_class_version(&class, fp);
     read_constant_pool(&class, fp);
-    print_class_info(&class);
+    read_access_flags(&class, fp, ClassType);
+    print_class_info(&class, argc[1]);
     return 0;
 }
