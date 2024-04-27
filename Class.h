@@ -24,6 +24,7 @@ typedef struct Class {
     FieldItem* field_table;                     // 字段表
 
     int flags;                                  // 访问标识
+    unsigned int interface_count;               // 接口数量
 } Class;
 
 /**
@@ -53,6 +54,11 @@ typedef enum FlagType {
  * 读取访问类型
  */
 void read_access_flags(Class*, FILE*, FlagType);
+
+/**
+ * 读取当前class继承的类和实现的接口信息
+ */
+void read_class_interface_info(Class*, FILE*);
 
 /**
  * 读取字段表

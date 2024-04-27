@@ -44,6 +44,13 @@
 #define ACC_ANNOTATION  0x2000  // 注解标识
 #define ACC_ENUM        0x4000  // 枚举标识
 
+/* 字段访问标识 */
+#define ACC_PRIVATE     0x0002
+#define ACC_PROTECTED   0x0004
+#define ACC_STATIC      0x0008
+#define ACC_VOLATILE    0x0040
+#define ACC_TRANSIENT   0x0080
+
 /**
  * 读取指定的n个字节
  * @return 读取结果

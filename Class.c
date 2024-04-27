@@ -74,6 +74,13 @@ void read_access_flags(Class* pthis, FILE* fp, FlagType type)
     }
 }
 
+void read_class_interface_info(Class* pthis, FILE* fp)
+{
+    pthis->this_class = read_n_byte(fp, U2);
+    pthis->super_class  = read_n_byte(fp, U2);
+    pthis->interface_count = read_n_byte(fp, U2);
+}
+
 void read_field_info(Class* pthis, FILE* fp)
 {
     // 初始化常量表
@@ -90,7 +97,7 @@ void read_field_info(Class* pthis, FILE* fp)
         {
             continue;
         }
-//        init_attr_table(&class.field_table[i], attr_count);
+//        read_field_attr(&(pthis->field_table[i]), fp, attr_count);
         // 读取字段属性表
 //        for (int j = 0; j < attr_count; j++)
 //        {
@@ -109,7 +116,6 @@ void init_field_table(Class* pthis, int count)
     for (int i = 0; i < count; i++)
     {
         FieldItem item = {0};
-//        construct_field_item(&item);
         pthis->field_table[i] = item;
     }
 }
@@ -126,6 +132,11 @@ void print_class_info(Class* pthis, char* path)
     {
         ConstantItem item = pthis->constant_pool[i];
         printf(" #%d = %s\t\t%s\n", item.index, const_type[item.type], item.value);
+    }
+    // 打印字段表信息
+    for (int i = 0; i < pthis->field_count; i++)
+    {
+        print_field_item(&(pthis->field_table[i]), pthis->constant_pool, pthis->constant_pool_count);
     }
 }
 
