@@ -13,4 +13,7 @@ add_executable(class4j Class4j.c
         ConstantItem.c
         FieldItem.h
         AttrWrapper.h
-        FieldItem.c)
+        FieldItem.c
+        AttrWrapper.c
+        AttrConstantValue.c
+        AttrConstantValue.h)

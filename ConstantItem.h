@@ -48,4 +48,10 @@ void read_class_info(FILE*, char*);
 
 void read_fieldref_info(FILE*, char*);
 
+/**
+ * 根据下标从常量池取值
+ * @return 常量对象
+ */
+ConstantItem get_constant_item_by_index(ConstantItem*, unsigned int, unsigned int);
+
 #endif //CLASS4J_CONSTANTITEM_H

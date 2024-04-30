@@ -3,9 +3,18 @@
 //
 #include "FieldItem.h"
 
-void read_field_attr(FieldItem* pthis, FILE* fp, unsigned int count)
+void read_field_attr(FieldItem* pthis, ConstantItem* p_pool, FILE* fp, unsigned int attr_count, unsigned int pool_count)
 {
-    init_attr_table(pthis, count);
+    // 初始化当前字段的属性表
+    init_attr_table(pthis, attr_count);
+    // 遍历属性，加入属性表
+    for (int i = 0; i < attr_count; i++)
+    {
+        // 当前attribute在常量池中的index
+        int attr_index = read_n_byte(fp, U2);
+        ConstantItem item = get_constant_item_by_index(p_pool, pool_count, attr_index);
+        add_attr(pthis, i, &item, fp);
+    }
 }
 
 void init_attr_table(FieldItem* pthis, unsigned int count)
@@ -14,13 +23,20 @@ void init_attr_table(FieldItem* pthis, unsigned int count)
     pthis->attr_table = (AttrWrapper*) malloc(count * sizeof(AttrWrapper));
 }
 
-void print_field_item(FieldItem* pthis, ConstantItem* pconst_pool, int pool_count)
+void add_attr(FieldItem* pthis, int attr_index, ConstantItem* pconst_item, FILE* fp)
+{
+    AttrWrapper attr = {0};
+    init_attr_wrapper(&attr, pconst_item, fp);
+    pthis->attr_table[attr_index] = attr;
+}
+
+void print_field_item(FieldItem* pthis, ConstantItem* p_pool, int pool_count)
 {
     char* field_name = NULL;
     char* field_descriptor = NULL;
     for (int i = 0; i < pool_count; i++)
     {
-        ConstantItem item = pconst_pool[i];
+        ConstantItem item = p_pool[i];
         if (field_name != NULL && field_descriptor != NULL)
         {
             break;
@@ -38,15 +54,15 @@ void print_field_item(FieldItem* pthis, ConstantItem* pconst_pool, int pool_coun
     }
     printf("%s;\n", field_name);
     printf(" descriptor: %s\n", field_descriptor);
-    printf_field_flag(pthis);
-//    pthis->printf_field_attr(pthis);
-    printf(" Attribute number: %d\n", pthis->attributes_count);
+    print_field_flag(pthis);
+    print_field_attr(pthis, p_pool, pool_count);
+//    printf(" Attribute number: %d\n", pthis->attributes_count);
     printf("\n");
     free(field_name);
     free(field_descriptor);
 }
 
-void printf_field_flag(FieldItem* pthis)
+void print_field_flag(FieldItem* pthis)
 {
     char flags_info[128] = {0};
     int byte1 = 0x000F & pthis->flags;
@@ -76,4 +92,12 @@ void printf_field_flag(FieldItem* pthis)
         flags_info[length - 2] = '\0';
     }
     printf(" flags: (0x%04x) %s\n", pthis->flags, flags_info);
+}
+
+void print_field_attr(FieldItem* pthis, ConstantItem* p_pool, unsigned int pool_count)
+{
+    for (int i = 0; i < pthis->attributes_count; i++)
+    {
+        print_attr_info(&pthis->attr_table[i], p_pool, pool_count);
+    }
 }

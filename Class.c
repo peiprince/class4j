@@ -97,15 +97,7 @@ void read_field_info(Class* pthis, FILE* fp)
         {
             continue;
         }
-//        read_field_attr(&(pthis->field_table[i]), fp, attr_count);
-        // 读取字段属性表
-//        for (int j = 0; j < attr_count; j++)
-//        {
-            // 当前attribute在常量池中的index
-//            int attr_index = read_n_byte(fp, U2);
-//            ConstantItem item = pthis.get_constant_item_by_index(attr_index, &class);
-//            append_attr(&class.field_table[i], j, &item, p_class);
-//        }
+        read_field_attr(&(pthis->field_table[i]), pthis->constant_pool, fp, attr_count, pthis->constant_pool_count);
     }
 }
 

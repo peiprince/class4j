@@ -113,3 +113,17 @@ void read_fieldref_info(FILE* fp, char* constant_value)
     int index2 = read_n_byte(fp, U2);
     sprintf(constant_value, "#%d.#%d", index1, index2);
 }
+
+ConstantItem get_constant_item_by_index(ConstantItem* pthis, unsigned int pool_count, unsigned int index)
+{
+    ConstantItem result = pthis[0];
+    for (int i = 0; i < pool_count; i++)
+    {
+        if (pthis[i].index == index)
+        {
+            result = pthis[i];
+            break;
+        }
+    }
+    return result;
+}
