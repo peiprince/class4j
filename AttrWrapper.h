@@ -6,10 +6,14 @@
 #define CLASS4J_ATTRWRAPPER_H
 
 #include "AttrConstantValue.h"
+#include "AttrDeprecated.h"
+#include "AttrRtVisAnnotations.h"
 #include "Common.h"
 #include "ConstantItem.h"
 
-#define CONSTANT_VALUE "ConstantValue"
+#define CONSTANT_VALUE  "ConstantValue"
+#define SIGNATURE       "Signature"
+#define DEPRECATED      "Deprecated"
 
 /**
  * 属性包装类

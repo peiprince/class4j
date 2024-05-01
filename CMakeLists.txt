@@ -16,4 +16,8 @@ add_executable(class4j Class4j.c
         FieldItem.c
         AttrWrapper.c
         AttrConstantValue.c
-        AttrConstantValue.h)
+        AttrConstantValue.h
+        AttrDeprecated.h
+        AttrDeprecated.c
+        AttrRtVisAnnotations.h
+        AttrRtVisAnnotations.c)

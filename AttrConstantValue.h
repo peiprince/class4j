@@ -7,9 +7,8 @@
 
 #include "ConstantItem.h"
 
-
 /**
- * ConstantValue
+ * ConstantValue || Signature
  */
 typedef struct ConstantAttr {
 
