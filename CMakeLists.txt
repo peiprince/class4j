@@ -20,4 +20,8 @@ add_executable(class4j Class4j.c
         AttrDeprecated.h
         AttrDeprecated.c
         AttrRtVisAnnotations.h
-        AttrRtVisAnnotations.c)
+        AttrRtVisAnnotations.c
+        AttrRtVisTypeAnnotations.h
+        AttrRtVisTypeAnnotations.c
+        AttrAnnotation.h
+        AttrAnnotation.c)

@@ -8,12 +8,15 @@
 #include "AttrConstantValue.h"
 #include "AttrDeprecated.h"
 #include "AttrRtVisAnnotations.h"
+#include "AttrRtVisTypeAnnotations.h"
 #include "Common.h"
 #include "ConstantItem.h"
 
-#define CONSTANT_VALUE  "ConstantValue"
-#define SIGNATURE       "Signature"
-#define DEPRECATED      "Deprecated"
+#define CONSTANT_VALUE                      "ConstantValue"
+#define SIGNATURE                           "Signature"
+#define DEPRECATED                          "Deprecated"
+#define RUNTIME_VISIBLE_ANNOTATIONS         "RuntimeVisibleAnnotations"
+#define RUNTIME_VISIBLE_TYPE_ANNOTATIONS    "RuntimeVisibleTypeAnnotations"
 
 /**
  * 属性包装类
