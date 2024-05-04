@@ -47,3 +47,27 @@ void concat_flag_info(int byte, int target, char* result, char* info)
         strcat(result, info);
     }
 }
+
+char* str_slash2dot(char* dest, char* source, unsigned int source_index, int source_end_index)
+{
+    unsigned int dest_index = 0;
+    for (int i = 0; i < strlen(source) + source_end_index; i++)
+    {
+        // 从source的第source_index位开始复制
+        if (i < source_index)
+        {
+            continue;
+        }
+        if ('/' == source[i])
+        {
+            dest[dest_index] = '.';
+        }
+        else
+        {
+            dest[dest_index] = source[i];
+        }
+        dest_index++;
+    }
+    dest[dest_index] = '\0';
+    return dest;
+}

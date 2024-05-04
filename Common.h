@@ -68,4 +68,9 @@ long long read_long_byte(FILE*);
  */
 void concat_flag_info(int, int, char*, char*);
 
+/**
+ * 移除指定的前缀后缀并将'/'转换成'.'并输出
+ */
+char* str_slash2dot(char*, char*, unsigned int, int);
+
 #endif //CLASS4J_COMMON_H

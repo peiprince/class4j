@@ -8,8 +8,10 @@
 typedef struct Annotation Annotation;
 typedef struct ElementValuePair ElementValuePair;
 typedef struct ElementValue ElementValue;
+typedef union EValue EValue;
 
 #include "Common.h"
+#include "ConstantItem.h"
 
 /**
  * Runtime注解
@@ -35,7 +37,12 @@ void init_annotation(Annotation*, FILE*);
 void add_element_value_pair(Annotation*, FILE*, unsigned int);
 
 /**
- * 当前注解中key-value对
+ * 打印Annotation
+ */
+void print_annotation(Annotation*, ConstantItem*, unsigned int, unsigned int);
+
+/**
+ * 当前注解中key-value对，即注解中的参数
  */
 typedef struct ElementValuePair {
 
@@ -45,28 +52,43 @@ typedef struct ElementValuePair {
 
 } ElementValuePair;
 
+/**
+ * 拼接注解参数值
+ */
+char* concat_param_key_value(ElementValuePair*, ConstantItem*, unsigned int, char*, char*);
+
+/**
+ * ElementValue，当前注解参数中的value
+ */
 typedef struct ElementValue {
     char tag;
-
-    union value {
-        unsigned int const_value_index;
-
-        struct enum_const_value {
-            unsigned int type_name_index;
-            unsigned int const_name_index;
-        };
-
-        unsigned int class_info_index;
-
-        Annotation annotation_value;
-
-        struct array_value {
-            unsigned int num_values;
-            ElementValue* values;
-        };
-    };
+    EValue* value;
 } ElementValue;
 
-void init_elementValue(ElementValue*, FILE*);
+/**
+ * 初始化ElementValue
+ */
+void init_element_value(ElementValue*, FILE*);
+
+/**
+ * EValue
+ */
+typedef union EValue {
+    unsigned int const_value_index;
+
+    struct {
+        unsigned int type_name_index;
+        unsigned int const_name_index;
+    } enum_const_value;
+
+    unsigned int class_info_index;
+
+    Annotation* annotation_value;
+
+    struct {
+        unsigned int num_values;
+        ElementValue* values;
+    } array_value;
+} EValue;
 
 #endif //CLASS4J_ATTRANNOTATION_H

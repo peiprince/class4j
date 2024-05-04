@@ -57,7 +57,7 @@ void init_constant_pool(Class* pthis, int count)
     for (int i = 0; i < count; i++)
     {
         ConstantItem item;
-        construct_const_item(&item);
+        init_const_item(&item);
         pthis->constant_pool[i] = item;
     }
 }

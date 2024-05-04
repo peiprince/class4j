@@ -61,9 +61,34 @@ void print_type_annotation(TypeAnnotation* pthis, ConstantItem* p_pool, unsigned
     // 打印target_info
     char* location = "";
     unsigned int type_index = pthis->annotation->type_index;
-    printf("   %d: #%d(): %s\n", annotation_index, type_index, locate_annotation(location, pthis->target_type));
-    ConstantItem item = get_constant_item_by_index(p_pool, pool_count, type_index);
-    printf("     %s\n", item.value);
+
+    // 拼接注解参数
+    char param_info[1 << 8] = {0};
+    char param_value_info[1 << 8] = {0};
+    for (int i = 0; i < pthis->annotation->num_element_value_pairs; i++)
+    {
+        char* index_str = malloc(1 << 8);
+        char* value_str = malloc(1 << 8);
+        concat_param_key_value(&pthis->annotation->element_value_pairs[i], p_pool, pool_count, index_str, value_str);
+        concat_flag_info(U1, U1, param_info, index_str);
+        concat_flag_info(U1, U1, param_value_info, value_str);
+        free(index_str);
+        free(value_str);
+    }
+    param_info[strlen(param_info) - 1] = '\0';
+
+    printf("   %d: #%d(%s): %s\n", annotation_index, type_index, param_info, locate_annotation(location, pthis->target_type));
+    char* source = get_constant_item_by_index(p_pool, pool_count, type_index).value;
+    char dest[1 << 8] = {0};
+    if (strlen(param_value_info) != 0)
+    {
+        param_value_info[strlen(param_value_info) - 1] = '\0';
+        printf("     %s(%s)\n", str_slash2dot(dest, source, 1, -1), param_value_info);
+    }
+    else
+    {
+        printf("     %s\n", str_slash2dot(dest, source, 1, -1));
+    }
 }
 
 void init_target_info(TargetInfo* pthis, FILE* fp, unsigned int type_index)

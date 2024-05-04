@@ -19,5 +19,6 @@ int main(int argv, char* argc[]) {
     read_class_interface_info(&class, fp);
     read_field_info(&class, fp);
     print_class_info(&class, argc[1]);
+    fclose(fp);
     return 0;
 }

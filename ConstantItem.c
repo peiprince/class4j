@@ -11,7 +11,7 @@ const char const_type[13][20] = {
         "Fieldref","Methodref","InterfaceMethodref","NameAndType"
 };
 
-void construct_const_item(ConstantItem* pthis)
+void init_const_item(ConstantItem* pthis)
 {
     pthis->index = 0;
     pthis->type = 0;

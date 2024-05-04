@@ -17,7 +17,7 @@ typedef struct ConstantItem {
 /**
  * 构造函数
  */
-void construct_const_item(ConstantItem*);
+void init_const_item(ConstantItem*);
 
 /**
  * 根据常量类型使用不同方法读取
