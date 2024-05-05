@@ -23,6 +23,9 @@ typedef struct Class {
     unsigned short field_count;                 // 字段数量
     FieldItem* field_table;                     // 字段表
 
+    unsigned short method_count;                // 方法数量
+    FieldItem* method_table;                    // 方法表
+
     int flags;                                  // 访问标识
     unsigned int interface_count;               // 接口数量
 } Class;
@@ -71,6 +74,16 @@ void read_field_info(Class*, FILE*);
 void init_field_table(Class*, int);
 
 /**
+ * 读取方法表
+ */
+void read_method_info(Class*, FILE*);
+
+/**
+ * 初始化方法表
+ */
+void init_method_table(Class*, int);
+
+/**
  * 打印class文件信息
  */
 void print_class_info(Class*, char*);
@@ -78,6 +91,11 @@ void print_class_info(Class*, char*);
 /**
  * 打印class文件访问类型
  */
-void printf_class_flag(Class*);
+void print_class_flag(Class*);
+
+/**
+ * 打印class文件基本信息，含flag,class,superclass,interfaces,fields,methods,attributes
+ */
+void print_class_basic_info(Class*);
 
 #endif //CLASS4J_CLASS_H

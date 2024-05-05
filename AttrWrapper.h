@@ -5,6 +5,7 @@
 #ifndef CLASS4J_ATTRWRAPPER_H
 #define CLASS4J_ATTRWRAPPER_H
 
+#include "AttrCode.h"
 #include "AttrConstantValue.h"
 #include "AttrDeprecated.h"
 #include "AttrRtVisAnnotations.h"
@@ -13,6 +14,7 @@
 #include "ConstantItem.h"
 
 #define CONSTANT_VALUE                      "ConstantValue"
+#define CODE                                "Code"
 #define SIGNATURE                           "Signature"
 #define DEPRECATED                          "Deprecated"
 #define RUNTIME_VISIBLE_ANNOTATIONS         "RuntimeVisibleAnnotations"

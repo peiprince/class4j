@@ -9,7 +9,7 @@
 #include "ConstantItem.h"
 
 /**
- * RuntimeVisibleAnnotation
+ * RuntimeVisibleAnnotation/RuntimeInvisibleAnnotation
  */
 typedef struct RtVisAnnotationAttr {
 

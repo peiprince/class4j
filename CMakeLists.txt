@@ -24,4 +24,6 @@ add_executable(class4j Class4j.c
         AttrRtVisTypeAnnotations.h
         AttrRtVisTypeAnnotations.c
         AttrAnnotation.h
-        AttrAnnotation.c)
+        AttrAnnotation.c
+        AttrCode.h
+        AttrCode.c)

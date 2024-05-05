@@ -12,6 +12,12 @@ void init_attr_wrapper(AttrWrapper* pthis, ConstantItem* pconst_item, FILE* fp)
         init_constant_attr(p_constant, pconst_item, fp);
         pthis->p_attr = p_constant;
     }
+    else if (strcmp(pthis->type, CODE) == 0)
+    {
+        CodeAttr* p_code = malloc(sizeof(CodeAttr));
+        init_code_attr(p_code, pconst_item, fp);
+        pthis->p_attr = p_code;
+    }
     else if (strcmp(pthis->type, DEPRECATED) == 0)
     {
         DeprecatedAttr* p_deprecated = malloc(sizeof(DeprecatedAttr));
@@ -38,6 +44,11 @@ void print_attr_info(AttrWrapper* pthis, ConstantItem* p_pool, unsigned int pool
     {
         ConstantAttr* p_constant = pthis->p_attr;
         print_constant_value_attr(p_constant, p_pool, pool_count);
+    }
+    else if (strcmp(pthis->type, CODE) == 0)
+    {
+        CodeAttr* p_code = pthis->p_attr;
+        print_code_attr(p_code, p_pool, pool_count);
     }
     else if (strcmp(pthis->type, DEPRECATED) == 0)
     {

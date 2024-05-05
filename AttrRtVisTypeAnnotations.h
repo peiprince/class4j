@@ -14,7 +14,7 @@ typedef struct LocalVar LocalVar;
 typedef struct TPath TPath;
 
 /**
- * RuntimeVisibleTypeAnnotations
+ * RuntimeVisibleTypeAnnotations/RuntimeInvisibleTypeAnnotations
  */
 typedef struct RtVisTypeAnnotationAttr {
 

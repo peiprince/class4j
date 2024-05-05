@@ -112,12 +112,44 @@ void init_field_table(Class* pthis, int count)
     }
 }
 
+void read_method_info(Class* pthis, FILE* fp)
+{
+    // 初始化方法表
+    init_method_table(pthis, read_n_byte(fp, U2));
+    for (int i = 0; i < pthis->method_count; i++)
+    {
+        pthis->method_table[i].flags = read_n_byte(fp, U2);
+        pthis->method_table[i].cons_index = read_n_byte(fp, U2);
+        pthis->method_table[i].descriptor = read_n_byte(fp, U2);
+        // 读取当前方法的属性数量并初始化属性表
+        unsigned int attr_count = read_n_byte(fp, U2);
+        if (attr_count <= 0)
+        {
+            continue;
+        }
+        read_field_attr(&(pthis->method_table[i]), pthis->constant_pool, fp, attr_count, pthis->constant_pool_count);
+    }
+}
+
+void init_method_table(Class* pthis, int count)
+{
+    pthis->method_count = count;
+    pthis->method_table = (FieldItem *) malloc(count * sizeof(FieldItem));
+    for (int i = 0; i < count; i++)
+    {
+        FieldItem item = {0};
+        pthis->method_table[i] = item;
+    }
+}
+
 void print_class_info(Class* pthis, char* path)
 {
     printf(" minor version: %d, major version: %d, available for JDK %d and above.\n",
            pthis->minor_version, pthis->major_version, pthis->major_version - 44);
 
-    printf_class_flag(pthis);
+    print_class_basic_info(pthis);
+
+
     // 打印常量池信息
     printf("Constant pool(total - %d):\n", pthis->constant_pool_count);
     for (int i = 0; i < pthis->constant_pool_count; i++)
@@ -130,9 +162,14 @@ void print_class_info(Class* pthis, char* path)
     {
         print_field_item(&(pthis->field_table[i]), pthis->constant_pool, pthis->constant_pool_count);
     }
+
+    for (int i = 0; i < pthis->method_count; i++)
+    {
+        print_field_item(&(pthis->method_table[i]), pthis->constant_pool, pthis->constant_pool_count);
+    }
 }
 
-void printf_class_flag(Class* pthis)
+void print_class_flag(Class* pthis)
 {
     char flags_info[128] = {0};
     int byte1 = 0x000F & pthis->flags;
@@ -156,4 +193,12 @@ void printf_class_flag(Class* pthis)
     size_t length = strlen(flags_info);
     flags_info[length - 2] = '\0';
     printf(" flags: (0x%04x) %s\n", pthis->flags, flags_info);
+}
+
+void print_class_basic_info(Class* pthis)
+{
+    print_class_flag(pthis);
+    printf(" this_class: %s\n", get_constant_item_by_index(pthis->constant_pool, pthis->constant_pool_count, pthis->this_class).value);
+    printf(" super_class: %s\n", get_constant_item_by_index(pthis->constant_pool, pthis->constant_pool_count, pthis->super_class).value);
+    printf(" interfaces: %d, fields: %d, methods: %d\n", pthis->interface_count, pthis->field_count, pthis->method_count);
 }
