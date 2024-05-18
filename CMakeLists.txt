@@ -26,4 +26,8 @@ add_executable(class4j Class4j.c
         AttrAnnotation.h
         AttrAnnotation.c
         AttrCode.h
-        AttrCode.c)
+        AttrCode.c
+        AttrLineNumberTable.h
+        AttrLineNumberTable.c
+        AttrLocalVariableTable.h
+        AttrLocalVariableTable.c)

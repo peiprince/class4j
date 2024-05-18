@@ -41,11 +41,6 @@ void check_class_version(Class*, FILE*);
 void read_constant_pool(Class*, FILE*);
 
 /**
- * 初始化常量池
- */
-void init_constant_pool(Class*, int);
-
-/**
  * 访问标识类型
  */
 typedef enum FlagType {
@@ -69,33 +64,13 @@ void read_class_interface_info(Class*, FILE*);
 void read_field_info(Class*, FILE*);
 
 /**
- * 初始化字段表
- */
-void init_field_table(Class*, int);
-
-/**
  * 读取方法表
  */
 void read_method_info(Class*, FILE*);
 
 /**
- * 初始化方法表
- */
-void init_method_table(Class*, int);
-
-/**
  * 打印class文件信息
  */
 void print_class_info(Class*, char*);
-
-/**
- * 打印class文件访问类型
- */
-void print_class_flag(Class*);
-
-/**
- * 打印class文件基本信息，含flag,class,superclass,interfaces,fields,methods,attributes
- */
-void print_class_basic_info(Class*);
 
 #endif //CLASS4J_CLASS_H

@@ -7,6 +7,12 @@ extern char const_type[11][20];
 extern unsigned int g_index;
 extern unsigned int power;
 
+static void init_constant_pool(Class*, int);
+static void init_field_table(Class*, int);
+static void init_method_table(Class*, int);
+static void print_class_flag(Class*);
+static void print_class_basic_info(Class*);
+
 /*
  * class版本号：	 45	 | 46  | 47  | 48  | 49  | 50  | 51  | 52  | ...
  * JDK版本号：JDK 1.1 | 1.2 | 1.3 | 1.4 | 1.5 | 1.6 | 1.7 | 1.8 | ...
@@ -50,7 +56,12 @@ void read_constant_pool(Class* pthis, FILE* fp)
     pthis->constant_pool_count = pool_count;
 }
 
-void init_constant_pool(Class* pthis, int count)
+ /**
+  * 初始化常量池
+  * @param pthis Class*
+  * @param count 常量池大小
+  */
+static void init_constant_pool(Class* pthis, int count)
 {
     pthis->constant_pool_count = count;
     pthis->constant_pool = (ConstantItem *) malloc(count * sizeof(ConstantItem));
@@ -101,7 +112,12 @@ void read_field_info(Class* pthis, FILE* fp)
     }
 }
 
-void init_field_table(Class* pthis, int count)
+/**
+ * 初始化字段表
+ * @param pthis Class*
+ * @param count 常量表大小
+ */
+static void init_field_table(Class* pthis, int count)
 {
     pthis->field_count = count;
     pthis->field_table = (FieldItem *) malloc(count * sizeof(FieldItem));
@@ -131,7 +147,12 @@ void read_method_info(Class* pthis, FILE* fp)
     }
 }
 
-void init_method_table(Class* pthis, int count)
+ /**
+  * 初始化方法表
+  * @param pthis Class*
+  * @param count 方法表大小
+  */
+static void init_method_table(Class* pthis, int count)
 {
     pthis->method_count = count;
     pthis->method_table = (FieldItem *) malloc(count * sizeof(FieldItem));
@@ -169,7 +190,7 @@ void print_class_info(Class* pthis, char* path)
     }
 }
 
-void print_class_flag(Class* pthis)
+static void print_class_flag(Class* pthis)
 {
     char flags_info[128] = {0};
     int byte1 = 0x000F & pthis->flags;
@@ -195,7 +216,10 @@ void print_class_flag(Class* pthis)
     printf(" flags: (0x%04x) %s\n", pthis->flags, flags_info);
 }
 
-void print_class_basic_info(Class* pthis)
+/**
+ * 打印class文件基本信息，含flag,class,superclass,interfaces,fields,methods,attributes
+ */
+static void print_class_basic_info(Class* pthis)
 {
     print_class_flag(pthis);
     printf(" this_class: %s\n", get_constant_item_by_index(pthis->constant_pool, pthis->constant_pool_count, pthis->this_class).value);

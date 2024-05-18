@@ -3,7 +3,8 @@
 //
 #include "AttrWrapper.h"
 
-void init_attr_wrapper(AttrWrapper* pthis, ConstantItem* pconst_item, FILE* fp)
+void init_attr_wrapper(AttrWrapper* pthis, ConstantItem* pconst_item, FILE* fp,
+                       ConstantItem* p_pool, unsigned int pool_count)
 {
     pthis->type = pconst_item->value;
     if (strcmp(pthis->type, CONSTANT_VALUE) == 0 || strcmp(pthis->type, SIGNATURE) == 0)
@@ -15,7 +16,7 @@ void init_attr_wrapper(AttrWrapper* pthis, ConstantItem* pconst_item, FILE* fp)
     else if (strcmp(pthis->type, CODE) == 0)
     {
         CodeAttr* p_code = malloc(sizeof(CodeAttr));
-        init_code_attr(p_code, pconst_item, fp);
+        init_code_attr(p_code, pconst_item, fp, p_pool, pool_count);
         pthis->p_attr = p_code;
     }
     else if (strcmp(pthis->type, DEPRECATED) == 0)

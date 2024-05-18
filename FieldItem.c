@@ -3,6 +3,11 @@
 //
 #include "FieldItem.h"
 
+static void init_attr_table(FieldItem*, unsigned int);
+static void add_attr(FieldItem*, int, ConstantItem*, FILE*, ConstantItem*, unsigned int);
+static void print_field_flag(FieldItem* pthis);
+static void print_field_attr(FieldItem*, ConstantItem*, unsigned int);
+
 void read_field_attr(FieldItem* pthis, ConstantItem* p_pool, FILE* fp, unsigned int attr_count, unsigned int pool_count)
 {
     // 初始化当前字段的属性表
@@ -13,20 +18,27 @@ void read_field_attr(FieldItem* pthis, ConstantItem* p_pool, FILE* fp, unsigned 
         // 当前attribute在常量池中的index
         int attr_index = read_n_byte(fp, U2);
         ConstantItem item = get_constant_item_by_index(p_pool, pool_count, attr_index);
-        add_attr(pthis, i, &item, fp);
+        add_attr(pthis, i, &item, fp, p_pool, pool_count);
     }
 }
 
-void init_attr_table(FieldItem* pthis, unsigned int count)
+/**
+ * 初始化属性表
+ */
+static void init_attr_table(FieldItem* pthis, unsigned int count)
 {
     pthis->attributes_count = count;
     pthis->attr_table = (AttrWrapper*) malloc(count * sizeof(AttrWrapper));
 }
 
-void add_attr(FieldItem* pthis, int attr_index, ConstantItem* pconst_item, FILE* fp)
+/**
+ * 添加属性至属性表
+ */
+static void add_attr(FieldItem* pthis, int attr_index, ConstantItem* pconst_item, FILE* fp,
+                     ConstantItem* p_pool, unsigned int pool_count)
 {
     AttrWrapper attr = {0};
-    init_attr_wrapper(&attr, pconst_item, fp);
+    init_attr_wrapper(&attr, pconst_item, fp, p_pool, pool_count);
     pthis->attr_table[attr_index] = attr;
 }
 
@@ -62,7 +74,10 @@ void print_field_item(FieldItem* pthis, ConstantItem* p_pool, int pool_count)
     free(field_descriptor);
 }
 
-void print_field_flag(FieldItem* pthis)
+/**
+ * 打印字段访问标识
+ */
+static void print_field_flag(FieldItem* pthis)
 {
     char flags_info[128] = {0};
     int byte1 = 0x000F & pthis->flags;
@@ -94,7 +109,10 @@ void print_field_flag(FieldItem* pthis)
     printf(" flags: (0x%04x) %s\n", pthis->flags, flags_info);
 }
 
-void print_field_attr(FieldItem* pthis, ConstantItem* p_pool, unsigned int pool_count)
+/**
+ * 打印当前字段属性表
+ */
+static void print_field_attr(FieldItem* pthis, ConstantItem* p_pool, unsigned int pool_count)
 {
     for (int i = 0; i < pthis->attributes_count; i++)
     {

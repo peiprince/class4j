@@ -3,6 +3,14 @@
 //
 #include "ConstantItem.h"
 
+static void read_utf8_info(FILE*, char*);
+static void read_integer_info(FILE*, char*);
+static void read_float_info(FILE*, char*);
+static void read_long_info(FILE*, char*);
+static void read_double_info(FILE*, char*);
+static void read_class_info(FILE*, char*);
+static void read_fieldref_info(FILE*, char*);
+
 extern unsigned int g_index;
 
 // 下标对应tag
@@ -56,7 +64,7 @@ void dispatch_constant_item(ConstantItem* pthis, FILE* fp, int type)
     }
 }
 
-void read_utf8_info(FILE* fp, char* constant_value)
+static void read_utf8_info(FILE* fp, char* constant_value)
 {
     int utf8_length = read_n_byte(fp, U2);
     int end_index = (int)g_index + utf8_length;
@@ -73,13 +81,13 @@ void read_utf8_info(FILE* fp, char* constant_value)
     free(utf8_bytes);
 }
 
-void read_integer_info(FILE* fp, char* constant_value)
+static void read_integer_info(FILE* fp, char* constant_value)
 {
     int number = read_n_byte(fp, U4);
     sprintf(constant_value, "%d", number);
 }
 
-void read_float_info(FILE* fp, char* constant_value)
+static void read_float_info(FILE* fp, char* constant_value)
 {
     IntFloatUnion un;
     int number = read_n_byte(fp, U4);
@@ -87,13 +95,13 @@ void read_float_info(FILE* fp, char* constant_value)
     sprintf(constant_value, "%gf", un.float_num);
 }
 
-void read_long_info(FILE* fp, char* constant_value)
+static void read_long_info(FILE* fp, char* constant_value)
 {
     long long number = read_long_byte(fp);
     sprintf(constant_value, "%lldl", number);
 }
 
-void read_double_info(FILE* fp, char* constant_value)
+static void read_double_info(FILE* fp, char* constant_value)
 {
     LongDoubleUnion un;
     long long number = read_long_byte(fp);
@@ -101,20 +109,20 @@ void read_double_info(FILE* fp, char* constant_value)
     sprintf(constant_value, "%.15fd", un.double_num);
 }
 
-void read_class_info(FILE* fp, char* constant_value)
+static void read_class_info(FILE* fp, char* constant_value)
 {
     int class_index = read_n_byte(fp, U2);	// 读取class_info中的name_index
     sprintf(constant_value, "#%d", class_index);
 }
 
-void read_fieldref_info(FILE* fp, char* constant_value)
+static void read_fieldref_info(FILE* fp, char* constant_value)
 {
     int index1 = read_n_byte(fp, U2);
     int index2 = read_n_byte(fp, U2);
     sprintf(constant_value, "#%d.#%d", index1, index2);
 }
 
-ConstantItem get_constant_item_by_index(ConstantItem* pthis, unsigned int pool_count, unsigned int index)
+inline ConstantItem get_constant_item_by_index(ConstantItem* pthis, unsigned int pool_count, unsigned int index)
 {
     ConstantItem result = pthis[0];
     for (int i = 0; i < pool_count; i++)

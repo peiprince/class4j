@@ -6,7 +6,7 @@
 unsigned int power = 0;
 unsigned int g_index = 0;	// 文件指针
 
-int read_n_byte(FILE* fp, int n)
+inline int read_n_byte(FILE* fp, int n)
 {
     int result = 0;
     power = 2 * n - 1;  // 一个字节对应两个16进制数

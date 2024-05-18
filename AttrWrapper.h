@@ -21,7 +21,8 @@
 #define RUNTIME_VISIBLE_TYPE_ANNOTATIONS    "RuntimeVisibleTypeAnnotations"
 
 /**
- * 属性包装类
+ * 属性包装类，不包含以下四种属性：
+ * StackMapTable, LineNumberTable, LocalVariableTable, LocalVariableTypeTable
  */
 typedef struct AttrWrapper {
 
@@ -34,7 +35,7 @@ typedef struct AttrWrapper {
 /**
  * 初始化方法，根据ConstantItem中的value构造不同类型的p_attr
  */
-void init_attr_wrapper(AttrWrapper*, ConstantItem*, FILE*);
+void init_attr_wrapper(AttrWrapper*, ConstantItem*, FILE*, ConstantItem*, unsigned int);
 
 /**
  * 打印当前属性信息

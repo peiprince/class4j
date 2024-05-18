@@ -28,28 +28,8 @@ typedef struct FieldItem {
 void read_field_attr(FieldItem*, ConstantItem*, FILE*, unsigned int, unsigned int);
 
 /**
- * 初始化属性表
- */
-void init_attr_table(FieldItem*, unsigned int);
-
-/**
- * 添加属性至属性表
- */
-void add_attr(FieldItem*, int, ConstantItem*, FILE*);
-
-/**
  * 打印字段信息
  */
 void print_field_item(FieldItem*, ConstantItem*, int);
-
-/**
- * 打印字段访问标识
- */
-void print_field_flag(FieldItem* pthis);
-
-/**
- * 打印当前字段属性表
- */
-void print_field_attr(FieldItem*, ConstantItem*, unsigned int);
 
 #endif //CLASS4J_FIELDITEM_H

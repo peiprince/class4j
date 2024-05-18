@@ -34,23 +34,12 @@ typedef union LongDoubleUnion {
     double double_num;
 } LongDoubleUnion;
 
-void read_utf8_info(FILE*, char*);
-
-void read_integer_info(FILE*, char*);
-
-void read_float_info(FILE*, char*);
-
-void read_long_info(FILE*, char*);
-
-void read_double_info(FILE*, char*);
-
-void read_class_info(FILE*, char*);
-
-void read_fieldref_info(FILE*, char*);
-
 /**
- * 根据下标从常量池取值
- * @return 常量对象
+ * 根据index从常量池获取item
+ * @param pthis ConstantItem*
+ * @param pool_count 常量池大小
+ * @param index item下标
+ * @return ConstantItem对象
  */
 ConstantItem get_constant_item_by_index(ConstantItem*, unsigned int, unsigned int);
 
