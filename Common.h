@@ -51,6 +51,9 @@
 #define ACC_VOLATILE    0x0040
 #define ACC_TRANSIENT   0x0080
 
+/* 形参访问标识 */
+#define ACC_MANDATED    0x8000
+
 /**
  * 读取指定的n个字节
  * @return 读取结果

@@ -67,8 +67,6 @@ typedef struct ExceptionItem {
 
 } ExceptionItem;
 
-static void init_exception_item(ExceptionItem*, FILE*);
-
 /**
  * 完全等同于AttrWrapper，避免头文件循环依赖，仅用于包装下列四种属性：
  * StackMapTable, LineNumberTable, LocalVariableTable, LocalVariableTypeTable

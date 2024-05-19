@@ -30,4 +30,8 @@ add_executable(class4j Class4j.c
         AttrLineNumberTable.h
         AttrLineNumberTable.c
         AttrLocalVariableTable.h
-        AttrLocalVariableTable.c)
+        AttrLocalVariableTable.c
+        AttrRtVisParamAnnotation.h
+        AttrRtVisParamAnnotation.c
+        AttrMethodParams.h
+        AttrMethodParams.c)

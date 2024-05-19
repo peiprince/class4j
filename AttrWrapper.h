@@ -9,16 +9,11 @@
 #include "AttrConstantValue.h"
 #include "AttrDeprecated.h"
 #include "AttrRtVisAnnotations.h"
+#include "AttrRtVisParamAnnotation.h"
 #include "AttrRtVisTypeAnnotations.h"
+#include "AttrMethodParams.h"
 #include "Common.h"
 #include "ConstantItem.h"
-
-#define CONSTANT_VALUE                      "ConstantValue"
-#define CODE                                "Code"
-#define SIGNATURE                           "Signature"
-#define DEPRECATED                          "Deprecated"
-#define RUNTIME_VISIBLE_ANNOTATIONS         "RuntimeVisibleAnnotations"
-#define RUNTIME_VISIBLE_TYPE_ANNOTATIONS    "RuntimeVisibleTypeAnnotations"
 
 /**
  * 属性包装类，不包含以下四种属性：

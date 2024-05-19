@@ -15,6 +15,9 @@
 #define INS_MAX_LEN     16
 #define INS_COUNT       205
 
+static void init_exception_item(ExceptionItem*, FILE*);
+static void save_code_attr(CodeAttr*, ConstantItem*, FILE*, ConstantItem*, unsigned int);
+
 /**
  * jvm指令
  */
@@ -85,8 +88,6 @@ static const int instruction_param[INS_COUNT] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
 };
-
-static void save_code_attr(CodeAttr*, ConstantItem*, FILE*, ConstantItem*, unsigned int);
 
 void init_code_attr(CodeAttr* pthis, ConstantItem* pconst_item, FILE* fp,
                     ConstantItem* p_pool, unsigned int pool_count)

@@ -24,6 +24,13 @@ void add_element_value_pair(Annotation* pthis, FILE* fp, unsigned int pair_index
     pthis->element_value_pairs[pair_index] = pair;
 }
 
+/**
+ * 打印注解信息
+ * @param pthis Annotation*
+ * @param p_pool 常量池
+ * @param pool_count 常量池大小
+ * @param annotation_index Annotation*中的下标
+ */
 void print_annotation(Annotation* pthis, ConstantItem* p_pool, unsigned int pool_count, unsigned int annotation_index)
 {
     unsigned int type_index = pthis->type_index;

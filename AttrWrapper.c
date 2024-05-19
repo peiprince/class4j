@@ -3,6 +3,15 @@
 //
 #include "AttrWrapper.h"
 
+#define CONSTANT_VALUE                      "ConstantValue"
+#define CODE                                "Code"
+#define SIGNATURE                           "Signature"
+#define DEPRECATED                          "Deprecated"
+#define RUNTIME_VISIBLE_ANNOTATIONS         "RuntimeVisibleAnnotations"
+#define RUNTIME_VISIBLE_PARAM_ANNOTATIONS   "RuntimeVisibleParameterAnnotations"
+#define RUNTIME_VISIBLE_TYPE_ANNOTATIONS    "RuntimeVisibleTypeAnnotations"
+#define METHOD_PARAMETERS                   "MethodParameters"
+
 void init_attr_wrapper(AttrWrapper* pthis, ConstantItem* pconst_item, FILE* fp,
                        ConstantItem* p_pool, unsigned int pool_count)
 {
@@ -31,11 +40,23 @@ void init_attr_wrapper(AttrWrapper* pthis, ConstantItem* pconst_item, FILE* fp,
         init_rt_vis_annotation_attr(p_annotation, pconst_item, fp);
         pthis->p_attr = p_annotation;
     }
+    else if (strcmp(pthis->type, RUNTIME_VISIBLE_PARAM_ANNOTATIONS) == 0)
+    {
+        RtVisParamAnnotationAttr* p_annotation = malloc(sizeof(RtVisParamAnnotationAttr));
+        init_rt_vis_param_annotation_attr(p_annotation, pconst_item, fp);
+        pthis->p_attr = p_annotation;
+    }
     else if (strcmp(pthis->type, RUNTIME_VISIBLE_TYPE_ANNOTATIONS) == 0)
     {
-        RtVisTypeAnnotationAttr* p_annotaion = malloc(sizeof(RtVisTypeAnnotationAttr));
-        init_rt_vis_type_annotation_attr(p_annotaion, pconst_item, fp);
-        pthis->p_attr = p_annotaion;
+        RtVisTypeAnnotationAttr* p_annotation = malloc(sizeof(RtVisTypeAnnotationAttr));
+        init_rt_vis_type_annotation_attr(p_annotation, pconst_item, fp);
+        pthis->p_attr = p_annotation;
+    }
+    else if (strcmp(pthis->type, METHOD_PARAMETERS) == 0)
+    {
+        MethodParametersAttr* p_params = malloc(sizeof(MethodParametersAttr));
+        init_method_parameters_attr(p_params, pconst_item, fp);
+        pthis->p_attr = p_params;
     }
 }
 
@@ -43,13 +64,11 @@ void print_attr_info(AttrWrapper* pthis, ConstantItem* p_pool, unsigned int pool
 {
     if (strcmp(pthis->type, CONSTANT_VALUE) == 0 || strcmp(pthis->type, SIGNATURE) == 0)
     {
-        ConstantAttr* p_constant = pthis->p_attr;
-        print_constant_value_attr(p_constant, p_pool, pool_count);
+        print_constant_value_attr(pthis->p_attr, p_pool, pool_count);
     }
     else if (strcmp(pthis->type, CODE) == 0)
     {
-        CodeAttr* p_code = pthis->p_attr;
-        print_code_attr(p_code, p_pool, pool_count);
+        print_code_attr(pthis->p_attr, p_pool, pool_count);
     }
     else if (strcmp(pthis->type, DEPRECATED) == 0)
     {
@@ -57,12 +76,18 @@ void print_attr_info(AttrWrapper* pthis, ConstantItem* p_pool, unsigned int pool
     }
     else if (strcmp(pthis->type, RUNTIME_VISIBLE_ANNOTATIONS) == 0)
     {
-        RtVisAnnotationAttr* p_annotation = pthis->p_attr;
-        print_rt_vis_annotation_attr(p_annotation, p_pool, pool_count);
+        print_rt_vis_annotation_attr(pthis->p_attr, p_pool, pool_count);
+    }
+    else if (strcmp(pthis->type, RUNTIME_VISIBLE_PARAM_ANNOTATIONS) == 0)
+    {
+        print_rt_vis_param_annotation_attr(pthis->p_attr, p_pool, pool_count);
     }
     else if (strcmp(pthis->type, RUNTIME_VISIBLE_TYPE_ANNOTATIONS) == 0)
     {
-        RtVisTypeAnnotationAttr* p_annotation = pthis->p_attr;
-        print_rt_vis_type_annotation_attr(p_annotation, p_pool, pool_count);
+        print_rt_vis_type_annotation_attr(pthis->p_attr, p_pool, pool_count);
+    }
+    else if (strcmp(pthis->type, METHOD_PARAMETERS) == 0)
+    {
+        print_method_parameters_attr(pthis->p_attr, p_pool, pool_count);
     }
 }
