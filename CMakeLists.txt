@@ -34,4 +34,11 @@ add_executable(class4j Class4j.c
         AttrRtVisParamAnnotation.h
         AttrRtVisParamAnnotation.c
         AttrMethodParams.h
-        AttrMethodParams.c)
+        AttrMethodParams.c
+        AttrExceptions.h
+        AttrExceptions.c
+        AttrSourceFile.h
+        AttrSourceFile.c
+        AttrInnerClass.h
+        AttrInnerClass.h
+        AttrInnerClass.c)

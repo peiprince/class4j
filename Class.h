@@ -26,8 +26,12 @@ typedef struct Class {
     unsigned short method_count;                // 方法数量
     FieldItem* method_table;                    // 方法表
 
+    unsigned short attributes_count;            // 属性数量
+    AttrWrapper* attributes;                    // 属性表
+
     int flags;                                  // 访问标识
     unsigned int interface_count;               // 接口数量
+
 } Class;
 
 /**
@@ -67,6 +71,11 @@ void read_field_info(Class*, FILE*);
  * 读取方法表
  */
 void read_method_info(Class*, FILE*);
+
+/**
+ * 读取属性表
+ */
+void read_attribute_info(Class*, FILE*);
 
 /**
  * 打印class文件信息

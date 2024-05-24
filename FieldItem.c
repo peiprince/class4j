@@ -69,7 +69,6 @@ void print_field_item(FieldItem* pthis, ConstantItem* p_pool, int pool_count)
     print_field_flag(pthis);
     print_field_attr(pthis, p_pool, pool_count);
 //    printf(" Attribute number: %d\n", pthis->attributes_count);
-    printf("\n");
     free(field_name);
     free(field_descriptor);
 }

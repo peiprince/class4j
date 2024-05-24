@@ -7,6 +7,9 @@
 
 #include "AttrCode.h"
 #include "AttrConstantValue.h"
+#include "AttrExceptions.h"
+#include "AttrInnerClass.h"
+#include "AttrSourceFile.h"
 #include "AttrDeprecated.h"
 #include "AttrRtVisAnnotations.h"
 #include "AttrRtVisParamAnnotation.h"
@@ -28,8 +31,13 @@ typedef struct AttrWrapper {
 } AttrWrapper;
 
 /**
- * 初始化方法，根据ConstantItem中的value构造不同类型的p_attr
- */
+* 初始化AttrWrapper，根据ConstantItem中的value构造不同类型的p_attr
+* @param pthis AttrWrapper*
+* @param pconst_item ConstantItem对象
+* @param fp FILE*指针
+* @param p_pool 常量池首地址
+* @param pool_count 常量池大小
+*/
 void init_attr_wrapper(AttrWrapper*, ConstantItem*, FILE*, ConstantItem*, unsigned int);
 
 /**

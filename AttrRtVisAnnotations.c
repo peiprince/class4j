@@ -3,6 +3,8 @@
 //
 #include "AttrRtVisAnnotations.h"
 
+static void add_annotation(RtVisAnnotationAttr*, FILE*, unsigned int);
+
 void init_rt_vis_annotation_attr(RtVisAnnotationAttr* pthis, ConstantItem* pconst_item, FILE* fp)
 {
     pthis->attribute_name_index = pconst_item->index;
@@ -16,7 +18,10 @@ void init_rt_vis_annotation_attr(RtVisAnnotationAttr* pthis, ConstantItem* pcons
     }
 }
 
-void add_annotation(RtVisAnnotationAttr* pthis, FILE* fp, unsigned int annotation_index)
+/**
+ * 添加Annotation
+ */
+static void add_annotation(RtVisAnnotationAttr* pthis, FILE* fp, unsigned int annotation_index)
 {
     Annotation annotation = {0};
     init_annotation(&annotation, fp);

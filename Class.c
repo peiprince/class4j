@@ -10,6 +10,7 @@ extern unsigned int power;
 static void init_constant_pool(Class*, int);
 static void init_field_table(Class*, int);
 static void init_method_table(Class*, int);
+static void init_attributes_table(Class*, int);
 static void print_class_flag(Class*);
 static void print_class_basic_info(Class*);
 
@@ -163,6 +164,28 @@ static void init_method_table(Class* pthis, int count)
     }
 }
 
+void read_attribute_info(Class* pthis, FILE* fp)
+{
+    init_attributes_table(pthis, read_n_byte(fp, U2));
+    for (int i = 0; i < pthis->attributes_count; i++)
+    {
+        int attr_index = read_n_byte(fp, U2);
+        ConstantItem item = get_constant_item_by_index(pthis->constant_pool, pthis->constant_pool_count, attr_index);
+        init_attr_wrapper(&pthis->attributes[i], &item, fp, pthis->constant_pool, pthis->constant_pool_count);
+    }
+}
+
+static void init_attributes_table(Class* pthis, int count)
+{
+    pthis->attributes_count = count;
+    pthis->attributes = (AttrWrapper *) malloc(count * sizeof(AttrWrapper));
+    for (int i = 0; i < count; i++)
+    {
+        AttrWrapper wrapper = {0};
+        pthis->attributes[0] = wrapper;
+    }
+}
+
 void print_class_info(Class* pthis, char* path)
 {
     printf(" minor version: %d, major version: %d, available for JDK %d and above.\n",
@@ -172,21 +195,27 @@ void print_class_info(Class* pthis, char* path)
 
 
     // 打印常量池信息
-    printf("Constant pool(total - %d):\n", pthis->constant_pool_count);
+    printf("----- Constant pool(total - %d) -----\n", pthis->constant_pool_count);
     for (int i = 0; i < pthis->constant_pool_count; i++)
     {
         ConstantItem item = pthis->constant_pool[i];
         printf(" #%d = %s\t\t%s\n", item.index, const_type[item.type], item.value);
     }
     // 打印字段表信息
+    printf("----- Fields(total - %d) -----\n", pthis->field_count);
     for (int i = 0; i < pthis->field_count; i++)
     {
         print_field_item(&(pthis->field_table[i]), pthis->constant_pool, pthis->constant_pool_count);
     }
-
+    printf("----- Methods(total - %d) -----\n", pthis->method_count);
     for (int i = 0; i < pthis->method_count; i++)
     {
         print_field_item(&(pthis->method_table[i]), pthis->constant_pool, pthis->constant_pool_count);
+    }
+    printf("----- Attributes(total - %d) -----\n", pthis->attributes_count);
+    for (int i = 0; i < pthis->attributes_count; i++)
+    {
+        print_attr_info(&pthis->attributes[i], pthis->constant_pool, pthis->constant_pool_count);
     }
 }
 

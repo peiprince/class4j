@@ -135,3 +135,26 @@ inline ConstantItem get_constant_item_by_index(ConstantItem* pthis, unsigned int
     }
     return result;
 }
+
+char* get_utf8_constant_value(ConstantItem* pthis, unsigned int pool_count, unsigned int index)
+{
+    for (int i = 0; i < pool_count; i++)
+    {
+        if (pthis[i].index == index)
+        {
+            if (pthis[i].type == CONSTANT_Utf8_info)
+            {
+                return pthis[i].value;
+            }
+            else
+            {
+                char* value = malloc(sizeof(strlen(pthis[i].value)));
+                value = str_slash2dot(value, pthis[i].value, 1, 0);
+                char* result = get_utf8_constant_value(pthis, pool_count, atoi(value));
+                free(value);
+                return result;
+            }
+        }
+    }
+    return "";
+}

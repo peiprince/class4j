@@ -29,11 +29,6 @@ typedef struct RtVisAnnotationAttr {
 void init_rt_vis_annotation_attr(RtVisAnnotationAttr*, ConstantItem*, FILE*);
 
 /**
- * 添加Annotation
- */
-void add_annotation(RtVisAnnotationAttr*, FILE*, unsigned int);
-
-/**
  * 打印RuntimeVisibleAnnotation属性
  */
 void print_rt_vis_annotation_attr(RtVisAnnotationAttr*, ConstantItem*, unsigned int);

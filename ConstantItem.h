@@ -43,4 +43,13 @@ typedef union LongDoubleUnion {
  */
 ConstantItem get_constant_item_by_index(ConstantItem*, unsigned int, unsigned int);
 
+/**
+ * 根据index从常量池获取utf8的value
+ * @param pthis ConstantItem*
+ * @param pool_count 常量池大小
+ * @param index item下标
+ * @return uf8常量的value
+ */
+char* get_utf8_constant_value(ConstantItem*, unsigned int, unsigned int);
+
 #endif //CLASS4J_CONSTANTITEM_H
