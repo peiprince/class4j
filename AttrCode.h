@@ -5,6 +5,7 @@
 #ifndef CLASS4J_ATTRCODE_H
 #define CLASS4J_ATTRCODE_H
 
+#include "AttrStackMapTable.h"
 #include "AttrLineNumberTable.h"
 #include "AttrLocalVariableTable.h"
 #include "Common.h"

@@ -41,4 +41,11 @@ add_executable(class4j Class4j.c
         AttrSourceFile.c
         AttrInnerClass.h
         AttrInnerClass.h
-        AttrInnerClass.c)
+        AttrInnerClass.c
+        AttrEnclosingMethod.h
+        AttrEnclosingMethod.c
+        AttrBootstrapMethods.h
+        AttrBootstrapMethods.c
+        AttrStackMapTable.h
+        AttrStackMapTable.c
+        AttrStackMapTable.c)

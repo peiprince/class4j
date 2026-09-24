@@ -12,7 +12,6 @@
 #define LOCAL_VARIABLE_TABLE_INDEX          2
 #define LOCAL_VARIABLE_TYPE_TABLE_INDEX     3
 
-#define INS_MAX_LEN     16
 #define INS_COUNT       205
 
 static void init_exception_item(ExceptionItem*, FILE*);
@@ -21,7 +20,7 @@ static void save_code_attr(CodeAttr*, ConstantItem*, FILE*, ConstantItem*, unsig
 /**
  * jvm指令
  */
-static const char* jvm_instruction[INS_MAX_LEN][INS_COUNT] = {
+static const char* jvm_instruction[INS_COUNT] = {
         "nop",             "aconst_null",   "iconst_m1",      "iconst_0",      "iconst_1",
         "iconst_2",        "iconst_3",      "iconst_3",       "iconst_4",      "iconst_5",
         "lconst_0",        "fconst_0",      "fconst_1",       "fconst_2",      "dconst_0",
@@ -66,27 +65,26 @@ static const char* jvm_instruction[INS_MAX_LEN][INS_COUNT] = {
 };
 
 static const int instruction_param[INS_COUNT] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,     // 0-9: nop~iconst_5
+        0, 0, 0, 0, 0, 0, 1, 2, 1, 2,      // 10-19: lconst_0~ldc_w
+        2, 1, 1, 1, 1, 1, 0, 0, 0, 0,      // 20-29: ldc2_w~iload
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 30-39: lload~iload_3
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 40-49: lload_0~aaload
+        0, 0, 0, 1, 1, 1, 1, 1, 0, 0,      // 50-59: baload~istore
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 60-69: lstore~istore_3
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 70-79: lstore_0~fstore_3
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 80-89: dstore_0~iastore
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 90-99: lastore~sastore
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 100-109: pop~dup2_x2
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 110-119: swap~ddiv
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 120-129: irem~dneg
+        0, 0, 0, 0, 0, 0, 2, 0, 0, 0,      // 130-139: ishl~i2d
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      // 140-149: l2i~dcmpg
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2,      // 150-159: ifeq~if_icmple
+        2, 2, 2, 2, 1, -1, -1, 0, 0, 0,    // 160-169: if_acmpeq~return
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2,      // 170-179: getstatic~anewarray
+        0, 0, 2, 2, 1, 4, 2, 3, 2, 2,      // 180-189: arraylength~ifnonnull
+        4, 4, 0, 0, 0                       // 190-194: goto_w~breakpoint
 };
 
 void init_code_attr(CodeAttr* pthis, ConstantItem* pconst_item, FILE* fp,
@@ -129,7 +127,9 @@ static void save_code_attr(CodeAttr* pthis, ConstantItem* pconst_item, FILE* fp,
     ConstantItem item = get_constant_item_by_index(p_pool, pool_count, index);
     if (strcmp(item.value, STACK_MAP_TABLE) == 0)
     {
-
+        StackMapTableAttr* p_table = malloc(sizeof(StackMapTableAttr));
+        init_stack_map_table_attr(p_table, &item, fp);
+        pthis->attributes[STACK_MAP_TABLE_INDEX] = p_table;
     }
     else if (strcmp(item.value, LINE_NUMBER_TABLE) == 0)
     {
@@ -157,9 +157,105 @@ void print_code_attr(CodeAttr* pthis, ConstantItem* p_pool, unsigned int pool_co
     ConstantItem item = get_constant_item_by_index(p_pool, pool_count, pthis->attribute_name_index);
     printf(" %s:\n", item.value);
     printf("   stack=%d, locals=%d, args_size=%d\n", pthis->max_stack, pthis->max_locals, pthis->max_locals);
+    if (pthis->exception_table_length > 0)
+    {
+        printf("   Exception table:\n");
+        printf("      from    to  target type\n");
+        for (int i = 0; i < pthis->exception_table_length; i++)
+        {
+            ExceptionItem ei = pthis->exception_item[i];
+            if (ei.catch_type == 0)
+            {
+                printf("       %4d  %4d  %4d   any\n", ei.start_pc, ei.end_pc, ei.handler_pc);
+            }
+            else
+            {
+                char* catch_class = get_utf8_constant_value(p_pool, pool_count, ei.catch_type);
+                char dest[256] = {0};
+                printf("       %4d  %4d  %4d   Class %s\n", ei.start_pc, ei.end_pc, ei.handler_pc,
+                       str_slash2dot(dest, catch_class, 0, 0));
+            }
+        }
+    }
+    printf("   Code:\n");
+    int pc = 0;
+    while (pc < pthis->code_length)
+    {
+        int opcode = pthis->code[pc];
+        if (opcode >= INS_COUNT)
+        {
+            printf("     %d: unknown opcode(%d)\n", pc, opcode);
+            pc++;
+            continue;
+        }
+        int param_bytes = instruction_param[opcode];
+        if (param_bytes == -1)
+        {
+            // tableswitch / lookupswitch，需要特殊处理
+            int padding = (4 - ((pc + 1) % 4)) % 4;
+            int base = pc + 1 + padding;
+            if (opcode == 170) // tableswitch
+            {
+                int default_offset = (pthis->code[base] << 24) | (pthis->code[base+1] << 16) |
+                                     (pthis->code[base+2] << 8) | pthis->code[base+3];
+                int low = (pthis->code[base+4] << 24) | (pthis->code[base+5] << 16) |
+                          (pthis->code[base+6] << 8) | pthis->code[base+7];
+                int high = (pthis->code[base+8] << 24) | (pthis->code[base+9] << 16) |
+                           (pthis->code[base+10] << 8) | pthis->code[base+11];
+                printf("     %d: tableswitch   { %d to %d }\n", pc, low, high);
+                pc = base + 12 + (high - low + 1) * 4;
+            }
+            else // lookupswitch (171)
+            {
+                int default_offset = (pthis->code[base] << 24) | (pthis->code[base+1] << 16) |
+                                     (pthis->code[base+2] << 8) | pthis->code[base+3];
+                int npairs = (pthis->code[base+4] << 24) | (pthis->code[base+5] << 16) |
+                             (pthis->code[base+6] << 8) | pthis->code[base+7];
+                printf("     %d: lookupswitch   { %d pairs }\n", pc, npairs);
+                pc = base + 8 + npairs * 8;
+            }
+            continue;
+        }
+        printf("     %d: %s", pc, jvm_instruction[opcode]);
+        if (param_bytes == 1)
+        {
+            printf("  #%d", pthis->code[pc + 1]);
+        }
+        else if (param_bytes == 2)
+        {
+            int operand = (pthis->code[pc + 1] << 8) | pthis->code[pc + 2];
+            if (opcode >= 178 && opcode <= 185)
+            {
+                char* ref = get_utf8_constant_value(p_pool, pool_count, operand);
+                printf("  // %s", ref);
+            }
+            else if (opcode >= 150 && opcode <= 167)
+            {
+                int offset = (short) operand;
+                printf("  %d", pc + offset);
+            }
+            else
+            {
+                printf("  #%d", operand);
+            }
+        }
+        else if (param_bytes == 3)
+        {
+            int operand = (pthis->code[pc + 1] << 16) | (pthis->code[pc + 2] << 8) | pthis->code[pc + 3];
+            printf("  #%d", operand);
+        }
+        else if (param_bytes == 4)
+        {
+            int operand = (pthis->code[pc + 1] << 24) | (pthis->code[pc + 2] << 16) |
+                          (pthis->code[pc + 3] << 8) | pthis->code[pc + 4];
+            printf("  #%d", operand);
+        }
+        printf("\n");
+        pc += 1 + param_bytes;
+    }
     if (pthis->attributes[STACK_MAP_TABLE_INDEX] != NULL)
     {
-
+        print_stack_map_table_attr(pthis->attributes[STACK_MAP_TABLE_INDEX], p_pool, pool_count);
     }
     if (pthis->attributes[LINE_NUMBER_TABLE_INDEX] != NULL)
     {

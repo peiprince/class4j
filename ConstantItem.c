@@ -10,13 +10,17 @@ static void read_long_info(FILE*, char*);
 static void read_double_info(FILE*, char*);
 static void read_class_info(FILE*, char*);
 static void read_fieldref_info(FILE*, char*);
+static void read_methodhandle_info(FILE*, char*);
+static void read_methodtype_info(FILE*, char*);
+static void read_invokedynamic_info(FILE*, char*);
 
 extern unsigned int g_index;
 
 // 下标对应tag
-const char const_type[13][20] = {
-        "", "Utf8", "", "Integer","Float","Long","Double","Class","String",
-        "Fieldref","Methodref","InterfaceMethodref","NameAndType"
+const char const_type[19][20] = {
+        "", "Utf8", "", "Integer","Float","Long","Double","Class","String","Fieldref",
+        "Methodref","InterfaceMethodref","NameAndType", "", "","MethodHandle", "MethodType",
+        "", "InvokeDynamic"
 };
 
 void init_const_item(ConstantItem* pthis)
@@ -58,6 +62,15 @@ void dispatch_constant_item(ConstantItem* pthis, FILE* fp, int type)
         case CONSTANT_InterfaceMethodref_info:
         case CONSTANT_NameAndType_info:
             read_fieldref_info(fp, pthis->value);
+            break;
+        case CONSTANT_MethodHandle_info:
+            read_methodhandle_info(fp, pthis->value);
+            break;
+        case CONSTANT_MethodType_info:
+            read_methodtype_info(fp, pthis->value);
+            break;
+        case CONSTANT_InvokeDynamic_info:
+            read_invokedynamic_info(fp, pthis->value);
             break;
         default:
             break;
@@ -120,6 +133,25 @@ static void read_fieldref_info(FILE* fp, char* constant_value)
     int index1 = read_n_byte(fp, U2);
     int index2 = read_n_byte(fp, U2);
     sprintf(constant_value, "#%d.#%d", index1, index2);
+}
+
+static void read_methodhandle_info(FILE* fp, char* constant_value)
+{
+    int kind = read_n_byte(fp, U1);
+    int index = read_n_byte(fp, U2);
+    sprintf(constant_value, "%d:#%d", kind, index);
+}
+
+static void read_methodtype_info(FILE* fp, char* constant_value)
+{
+    sprintf(constant_value, "#%d", read_n_byte(fp, U2));
+}
+
+static void read_invokedynamic_info(FILE* fp, char* constant_value)
+{
+    int index1 = read_n_byte(fp, U2);
+    int index2 = read_n_byte(fp, U2);
+    sprintf(constant_value, "#%d:#%d", index1, index2);
 }
 
 inline ConstantItem get_constant_item_by_index(ConstantItem* pthis, unsigned int pool_count, unsigned int index)

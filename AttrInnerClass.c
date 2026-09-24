@@ -10,7 +10,7 @@ void init_inner_class_attr(InnerClassAttr* pthis, ConstantItem* pconst_item, FIL
     pthis->attribute_name_index = pconst_item->index;
     pthis->attribute_length = read_n_byte(fp, U4);
     pthis->number_of_classes = read_n_byte(fp, U2);
-    pthis->classes = malloc(pthis->number_of_classes * sizeof(InnerClass*));
+    pthis->classes = malloc(pthis->number_of_classes * sizeof(InnerClass));
     for (int i = 0; i < pthis->number_of_classes; i++)
     {
         InnerClass inner_class = {0};
@@ -24,11 +24,20 @@ void print_inner_class_attr(InnerClassAttr* pthis, ConstantItem* p_pool, unsigne
     printf(" InnerClasses:\n");
     for (int i = 0; i < pthis->number_of_classes; i++)
     {
-        printf("   #%d = #%d of #%d;    // %s=class %s of %s\n",
-               pthis->classes[i].inner_name_index, pthis->classes[i].inner_class_info_index, pthis->classes[i].outer_class_info_index,
-               get_utf8_constant_value(p_pool, pool_count, pthis->classes[i].inner_name_index),
-               get_utf8_constant_value(p_pool, pool_count, pthis->classes[i].inner_class_info_index),
-               get_utf8_constant_value(p_pool, pool_count, pthis->classes[i].outer_class_info_index));
+        // 匿名内部类outer_class_info_index == 0, inner_class_info_index = 0
+        if (pthis->classes[i].outer_class_info_index == 0 && pthis->classes[i].inner_name_index == 0)
+        {
+            printf("   #%d;    // %s\n", pthis->classes[i].inner_class_info_index,
+                   get_utf8_constant_value(p_pool, pool_count, pthis->classes[i].inner_class_info_index));
+        }
+        else
+        {
+            printf("   #%d = #%d of #%d;    // %s=class %s of %s\n",
+                   pthis->classes[i].inner_name_index, pthis->classes[i].inner_class_info_index, pthis->classes[i].outer_class_info_index,
+                   get_utf8_constant_value(p_pool, pool_count, pthis->classes[i].inner_name_index),
+                   get_utf8_constant_value(p_pool, pool_count, pthis->classes[i].inner_class_info_index),
+                   get_utf8_constant_value(p_pool, pool_count, pthis->classes[i].outer_class_info_index));
+        }
     }
 }
 

@@ -14,11 +14,16 @@ typedef struct Class {
     unsigned short minor_version;				// 次版本号
     unsigned short major_version;				// 主版本号
 
+    unsigned short constant_pool_count;			// 常量池大小
+    ConstantItem* constant_pool;                // 常量池
+
+    int flags;                                  // 访问标识
+
     unsigned int this_class;                    // 本类类名序号
     unsigned int super_class;                   // 父类类名序号
 
-    unsigned short constant_pool_count;			// 常量池大小
-    ConstantItem* constant_pool;                // 常量池
+    unsigned int interface_count;               // 接口数量
+    unsigned int* interfaces;                   // 接口集合
 
     unsigned short field_count;                 // 字段数量
     FieldItem* field_table;                     // 字段表
@@ -28,9 +33,6 @@ typedef struct Class {
 
     unsigned short attributes_count;            // 属性数量
     AttrWrapper* attributes;                    // 属性表
-
-    int flags;                                  // 访问标识
-    unsigned int interface_count;               // 接口数量
 
 } Class;
 

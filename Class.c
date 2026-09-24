@@ -3,7 +3,7 @@
 //
 #include "Class.h"
 
-extern char const_type[11][20];
+extern const char const_type[19][20];
 extern unsigned int g_index;
 extern unsigned int power;
 
@@ -22,7 +22,7 @@ static void print_class_basic_info(Class*);
 void check_class_version(Class* pthis, FILE* fp)
 {
     // 魔数
-    int magic_num = read_n_byte(fp, U4);
+    unsigned int magic_num = read_n_byte(fp, U4);
     assert(magic_num == 0xcafebabe);
 
     pthis->minor_version = read_n_byte(fp, U2);
@@ -68,7 +68,7 @@ static void init_constant_pool(Class* pthis, int count)
     pthis->constant_pool = (ConstantItem *) malloc(count * sizeof(ConstantItem));
     for (int i = 0; i < count; i++)
     {
-        ConstantItem item;
+        ConstantItem item = {0};
         init_const_item(&item);
         pthis->constant_pool[i] = item;
     }
@@ -91,6 +91,11 @@ void read_class_interface_info(Class* pthis, FILE* fp)
     pthis->this_class = read_n_byte(fp, U2);
     pthis->super_class  = read_n_byte(fp, U2);
     pthis->interface_count = read_n_byte(fp, U2);
+    pthis->interfaces = malloc(pthis->interface_count * sizeof(unsigned int));
+    for (int i = 0; i < pthis->interface_count; i++)
+    {
+        pthis->interfaces[i] = read_n_byte(fp, U2);
+    }
 }
 
 void read_field_info(Class* pthis, FILE* fp)
@@ -182,7 +187,7 @@ static void init_attributes_table(Class* pthis, int count)
     for (int i = 0; i < count; i++)
     {
         AttrWrapper wrapper = {0};
-        pthis->attributes[0] = wrapper;
+        pthis->attributes[i] = wrapper;
     }
 }
 
@@ -241,6 +246,7 @@ static void print_class_flag(Class* pthis)
     concat_flag_info(byte4, ACC_ENUM, flags_info, "ACC_ENUM, ");
 
     size_t length = strlen(flags_info);
+    assert(length >= 2);
     flags_info[length - 2] = '\0';
     printf(" flags: (0x%04x) %s\n", pthis->flags, flags_info);
 }
@@ -251,7 +257,7 @@ static void print_class_flag(Class* pthis)
 static void print_class_basic_info(Class* pthis)
 {
     print_class_flag(pthis);
-    printf(" this_class: %s\n", get_constant_item_by_index(pthis->constant_pool, pthis->constant_pool_count, pthis->this_class).value);
-    printf(" super_class: %s\n", get_constant_item_by_index(pthis->constant_pool, pthis->constant_pool_count, pthis->super_class).value);
-    printf(" interfaces: %d, fields: %d, methods: %d\n", pthis->interface_count, pthis->field_count, pthis->method_count);
+    printf(" this_class: #%d     // %s\n", pthis->this_class, get_utf8_constant_value(pthis->constant_pool, pthis->constant_pool_count, pthis->this_class));
+    printf(" super_class: #%d    // %s\n", pthis->super_class, get_utf8_constant_value(pthis->constant_pool, pthis->constant_pool_count, pthis->super_class));
+    printf(" interfaces: %d, fields: %d, methods: %d, attributes: %d\n", pthis->interface_count, pthis->field_count, pthis->method_count, pthis->attributes_count);
 }

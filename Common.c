@@ -3,13 +3,12 @@
 //
 #include "Common.h"
 
-unsigned int power = 0;
 unsigned int g_index = 0;	// 文件指针
 
-inline int read_n_byte(FILE* fp, int n)
+inline unsigned int read_n_byte(FILE* fp, unsigned int n)
 {
-    int result = 0;
-    power = 2 * n - 1;  // 一个字节对应两个16进制数
+    unsigned int result = 0;
+    unsigned power = 2 * n - 1;  // 一个字节对应两个16进制数
     unsigned int end_index = g_index + n;
     while (g_index < end_index)
     {
@@ -26,7 +25,7 @@ inline int read_n_byte(FILE* fp, int n)
 long long read_long_byte(FILE* fp)
 {
     long long result = 0;
-    power = 2 * U8 - 1;  // 一个字节对应两个16进制数
+    unsigned int power = 2 * U8 - 1;  // 一个字节对应两个16进制数
     unsigned int end_index = g_index + U8;
     while (g_index < end_index)
     {

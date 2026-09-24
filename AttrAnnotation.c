@@ -80,6 +80,42 @@ char* concat_param_key_value(ElementValuePair* pthis, ConstantItem* p_pool, unsi
             value_index = pthis->value->value->const_value_index;
             value = get_constant_item_by_index(p_pool, pool_count, pthis->value->value->const_value_index).value;
             break;
+        case 'e':
+        {
+            char* enum_type = get_constant_item_by_index(p_pool, pool_count, pthis->value->value->enum_const_value.type_name_index).value;
+            char* enum_name = get_constant_item_by_index(p_pool, pool_count, pthis->value->value->enum_const_value.const_name_index).value;
+            char type_buf[128] = {0};
+            str_slash2dot(type_buf, enum_type, 1, -1);
+            sprintf(index_str, "#%u=%ce#%u,", pthis->element_name_index, pthis->value->tag,
+                    pthis->value->value->enum_const_value.type_name_index);
+            sprintf(value_str, "%s=%s.%s ",
+                    get_constant_item_by_index(p_pool, pool_count, pthis->element_name_index).value,
+                    type_buf, enum_name);
+            return value_str;
+        }
+        case 'c':
+        {
+            char* class_name = get_constant_item_by_index(p_pool, pool_count, pthis->value->value->class_info_index).value;
+            char class_buf[128] = {0};
+            str_slash2dot(class_buf, class_name, 0, 0);
+            sprintf(index_str, "#%u=%cc#%u,", pthis->element_name_index, pthis->value->tag,
+                    pthis->value->value->class_info_index);
+            sprintf(value_str, "%s=%s ",
+                    get_constant_item_by_index(p_pool, pool_count, pthis->element_name_index).value,
+                    class_buf);
+            return value_str;
+        }
+        case '@':
+            sprintf(index_str, "#%u=%c@,", pthis->element_name_index, pthis->value->tag);
+            sprintf(value_str, "%s=@%s ",
+                    get_constant_item_by_index(p_pool, pool_count, pthis->element_name_index).value,
+                    get_constant_item_by_index(p_pool, pool_count, pthis->value->value->annotation_value->type_index).value);
+            return value_str;
+        case '[':
+            sprintf(index_str, "#%u=%c[,", pthis->element_name_index, pthis->value->tag);
+            sprintf(value_str, "%s={...} ",
+                    get_constant_item_by_index(p_pool, pool_count, pthis->element_name_index).value);
+            return value_str;
         default:
             value = "";
             break;

@@ -37,13 +37,14 @@ void init_type_annotation(TypeAnnotation* pthis, FILE* fp)
     pthis->target_type = read_n_byte(fp, U1);
 
     // 初始化target_info
-    TargetInfo target_info = {0};
-    init_target_info(&target_info, fp, pthis->target_type);
-    pthis->target_info = &target_info;
+    TargetInfo* p_target_info = malloc(sizeof(TargetInfo));
+    init_target_info(p_target_info, fp, pthis->target_type);
+    pthis->target_info = p_target_info;
 
     // 初始化target_path
     int path_length = read_n_byte(fp, U1);
     pthis->target_path.path_length = path_length;
+    pthis->target_path.path = malloc(path_length * sizeof(TPath));
     for (int i = 0; i < path_length; i++)
     {
         TPath path = {0};

@@ -5,15 +5,17 @@
 #ifndef CLASS4J_ATTRWRAPPER_H
 #define CLASS4J_ATTRWRAPPER_H
 
-#include "AttrCode.h"
 #include "AttrConstantValue.h"
+#include "AttrCode.h"
 #include "AttrExceptions.h"
 #include "AttrInnerClass.h"
+#include "AttrEnclosingMethod.h"
 #include "AttrSourceFile.h"
 #include "AttrDeprecated.h"
 #include "AttrRtVisAnnotations.h"
 #include "AttrRtVisParamAnnotation.h"
 #include "AttrRtVisTypeAnnotations.h"
+#include "AttrBootstrapMethods.h"
 #include "AttrMethodParams.h"
 #include "Common.h"
 #include "ConstantItem.h"

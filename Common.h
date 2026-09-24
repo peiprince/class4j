@@ -34,6 +34,9 @@
 #define CONSTANT_Methodref_info				10
 #define CONSTANT_InterfaceMethodref_info	11
 #define CONSTANT_NameAndType_info			12
+#define CONSTANT_MethodHandle_info          15
+#define CONSTANT_MethodType_info            16
+#define CONSTANT_InvokeDynamic_info         18
 
 /* 访问标识 */
 #define ACC_PUBLIC      0x0001  // 是否public
@@ -59,7 +62,7 @@
  * 读取指定的n个字节
  * @return 读取结果
  */
-int read_n_byte(FILE*, int);
+unsigned int read_n_byte(FILE*, unsigned int);
 
 /**
  * 读取8个字节，long和double专用
