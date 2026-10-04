@@ -1,0 +1,83 @@
+//
+// Created by Administrator on 2024/4/23 0023.
+//
+#pragma once
+#ifndef CLASS4J_COMMON_H
+#define CLASS4J_COMMON_H
+
+#include <assert.h>
+#include <malloc.h>
+#include <math.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <libgen.h>
+
+#define HEX_BASE 16
+
+/* Class类型 */
+#define U1 1
+#define U2 2
+#define U4 4
+#define U8 8
+
+/* 常量类型 */
+#define CONSTANT_Utf8_info					1
+#define CONSTANT_Integer_info				3
+#define CONSTANT_Float_info					4
+#define CONSTANT_Long_info					5
+#define CONSTANT_Double_info				6
+#define CONSTANT_Class_info					7
+#define CONSTANT_String_info				8
+#define CONSTANT_Fieldref_info				9
+#define CONSTANT_Methodref_info				10
+#define CONSTANT_InterfaceMethodref_info	11
+#define CONSTANT_NameAndType_info			12
+#define CONSTANT_MethodHandle_info          15
+#define CONSTANT_MethodType_info            16
+#define CONSTANT_InvokeDynamic_info         18
+
+/* 访问标识 */
+#define ACC_PUBLIC      0x0001  // 是否public
+#define ACC_FINAL       0x0010  // 是否final类
+#define ACC_SUPER       0x0020  // 是否允许invokespecial字节码指定，jdk1.2后存在
+#define ACC_INTERFACE   0x0200  // 接口标识
+#define ACC_ABSTRACT    0x0400  // 是否抽象，适用于接口和抽象类
+#define ACC_SYNTHETIC   0x1000  // 非用户代码生成的类
+#define ACC_ANNOTATION  0x2000  // 注解标识
+#define ACC_ENUM        0x4000  // 枚举标识
+
+/* 字段访问标识 */
+#define ACC_PRIVATE     0x0002
+#define ACC_PROTECTED   0x0004
+#define ACC_STATIC      0x0008
+#define ACC_VOLATILE    0x0040
+#define ACC_TRANSIENT   0x0080
+
+/* 形参访问标识 */
+#define ACC_MANDATED    0x8000
+
+/**
+ * 读取指定的n个字节
+ * @return 读取结果
+ */
+unsigned int read_n_byte(FILE*, unsigned int);
+
+/**
+ * 读取8个字节，long和double专用
+ * @return 读取结果
+ */
+long long read_long_byte(FILE*);
+
+/**
+ * 拼接访问标识
+ */
+void concat_flag_info(int, int, char*, char*);
+
+/**
+ * 移除指定的前缀后缀并将'/'转换成'.'并输出
+ */
+char* str_slash2dot(char*, char*, unsigned int, int);
+
+#endif //CLASS4J_COMMON_H
